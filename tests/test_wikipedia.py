@@ -6,7 +6,7 @@ from selene import browser, have
 def test_search():
     with step('Language'):
         browser.element((AppiumBy.ID, 'org.wikipedia.alpha:id/option_label')).should(
-            have.text('Русский'))
+            have.text('Россия'))
 
     with step('Next welcome screen'):
         browser.element((AppiumBy.ID, 'org.wikipedia.alpha:id/fragment_onboarding_forward_button')).click()

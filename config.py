@@ -1,33 +1,44 @@
 import os
 from dotenv import load_dotenv
 from appium.options.android import UiAutomator2Options
-from utils.file import path_from_project
+from utils import file
 
 
-def to_driver_options(context, device_name):
+def to_driver_options(context):
     options = UiAutomator2Options()
-    env_file_path = path_from_project(f".env.{context}")
-    load_dotenv(dotenv_path=env_file_path)
 
-    if context == 'real_device' or context == 'emulator':
+    if context == 'emulator':
+        options.set_capability('remote_url', os.getenv('REMOTE_URL'))  # адрес удаленного сервера
+        options.set_capability('deviceName', os.getenv('DEVICE_NAME'))  # имя устройства
+        options.set_capability('appWaitActivity', os.getenv(
+            'APP_WAIT_ACTIVITY'))  # активити, которая будет открыта после запуска apk файла
+        # options.set_capability('udid', os.getenv('UDID')) # уникальный идентификатор устройства
+        options.set_capability('app', file.path_from_project(os.getenv('APP')))  # путь до apk файла
+
+    if context == 'real_device':
         options.set_capability('remote_url', os.getenv('REMOTE_URL'))
         options.set_capability('deviceName', os.getenv('DEVICE_NAME'))
         options.set_capability('appWaitActivity', os.getenv('APP_WAIT_ACTIVITY'))
-        options.set_capability('app', path_from_project(os.getenv('APP')))
-    else:
-        options = {
-            'deviceName': device_name,
-            'remote_url': 'http://hub.browserstack.com/wd/hub',
-            'app': os.getenv('app'),
+        # options.set_capability('udid', os.getenv('UDID'))
+        options.set_capability('app', file.path_from_project(os.getenv('APP')))
 
-            'bstack:options': {
-                'projectName': 'First Python project',
+    if context == 'bstack':
+        options.set_capability('remote_url', os.getenv('REMOTE_URL'))
+        options.set_capability('deviceName', os.getenv('DEVICE_NAME'))
+        options.set_capability('platformName', os.getenv('PLATFORM_NAME'))
+        options.set_capability('platformVersion', os.getenv('PLATFORM_VERSION'))
+        options.set_capability('appWaitActivity', os.getenv('APP_WAIT_ACTIVITY'))
+        options.set_capability('app', os.getenv('APP'))
+        load_dotenv(dotenv_path=file.path_from_project(
+            '.env.bstack'))  # загрузка переменных окружения из файла .env.credentials
+        options.set_capability(
+            'bstack:options', {
+                'projectName': 'Wikipedia project',
                 'buildName': 'browserstack-build-1',
-                'sessionName': 'BStack first_test',
-
-                'userName': os.getenv('bstack_userName'),
-                'accessKey': os.getenv('bstack_accessKey'),
-            }
-        }
+                'sessionName': 'BStack test',
+                'userName': os.getenv('USER_NAME'),
+                'accessKey': os.getenv('ACCESS_KEY'),
+            },
+        )
 
     return options
