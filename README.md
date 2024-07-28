@@ -22,7 +22,7 @@
 
 **Запуск автотестов**
 
-> `pytest tests/test_wikipedia_bstack.py --context=bstack` - BrowserStack  
+> `pytest tests/test_wikipedia_emulator.py --context=bstack` - BrowserStack  
 > `pytest tests/test_wikipedia_real_device.py --context=real_device` - Real Device  
 > `pytest tests/test_wikipedia_emulator.py --context=emulator` - Emulator
 
