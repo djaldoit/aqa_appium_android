@@ -38,9 +38,9 @@ def mobile_management(context):
 
     attach.add_screenshot(browser)
     attach.add_xml(browser)
-    session_id = browser.driver.session_id
 
     browser.quit()
 
     if context == 'bstack':
+        session_id = browser.driver.session_id
         attach.add_video(session_id)

@@ -3,10 +3,10 @@ from appium.webdriver.common.appiumby import AppiumBy
 from selene import browser, have
 
 
-def test_search():
+def test_wikipedia_real_device():
     with step('Language'):
         browser.element((AppiumBy.ID, 'org.wikipedia.alpha:id/option_label')).should(
-            have.text('Россия'))
+            have.text('Русский'))
 
     with step('Next welcome screen'):
         browser.element((AppiumBy.ID, 'org.wikipedia.alpha:id/fragment_onboarding_forward_button')).click()
@@ -31,3 +31,4 @@ def test_search():
 
     with step('Stat button'):
         browser.element((AppiumBy.ID, 'org.wikipedia.alpha:id/fragment_onboarding_done_button')).click()
+

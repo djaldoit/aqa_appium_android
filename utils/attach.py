@@ -5,8 +5,6 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
-user_name = os.getenv("USER_NAME")
-access_key = os.getenv("ACCESS_KEY")
 
 
 def add_screenshot(browser):
@@ -23,12 +21,13 @@ def add_xml(browser):
                   attachment_type=allure.attachment_type.XML)
 
 
-def add_video(browser):
-    browserstack_session = requests.get(
-        url=f'https://api.browserstack.com/app-automate/sessions/{browser.driver.session_id}.json',
-        auth=(user_name, access_key)
+def add_video(session_id):
+    bstack_session = requests.get(
+        f'https://api.browserstack.com/app-automate/sessions/{session_id}.json',
+        auth=(os.getenv('USER_NAME'), os.getenv('ACCESS_KEY')),
     ).json()
-    video_url = browserstack_session['automation_session'].get('video_url')
+    print(bstack_session)
+    video_url = bstack_session['automation_session']['video_url']
 
     allure.attach(
         '<html><body>'
